@@ -1,9 +1,10 @@
-const app = require("./app");
-const config = require("./config/env");
+import { Server } from "http";
+import config from "./config/env";
+import app from "./app";
 
 const PORT = config.port;
 
-const server = app.listen(PORT, () => {
+const server: Server = app.listen(PORT, () => {
   console.log(`
 🚀 Server is running in ${config.nodeEnv} mode
 📍 Port: ${PORT}
@@ -14,7 +15,7 @@ const server = app.listen(PORT, () => {
 });
 
 // Handle unhandled promise rejections
-process.on("unhandledRejection", (err, promise) => {
+process.on("unhandledRejection", (err: Error) => {
   console.log(`Unhandled Rejection: ${err.message}`);
   // Close server & exit process
   server.close(() => {
@@ -23,7 +24,7 @@ process.on("unhandledRejection", (err, promise) => {
 });
 
 // Handle uncaught exceptions
-process.on("uncaughtException", (err) => {
+process.on("uncaughtException", (err: Error) => {
   console.log(`Uncaught Exception: ${err.message}`);
   process.exit(1);
 });
@@ -36,4 +37,4 @@ process.on("SIGTERM", () => {
   });
 });
 
-module.exports = server;
+export default server;

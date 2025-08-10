@@ -1,9 +1,15 @@
-const JWTUtil = require("../utils/jwt");
-const { UnauthorizedError } = require("../utils/httpError");
-const userRepository = require("../repositories/user.repository");
+import { Request, Response, NextFunction } from "express";
+import JWTUtil from "../utils/jwt";
+import { UnauthorizedError } from "../utils/httpError";
+import userRepository from "../repositories/user.repository";
+import { AuthenticatedRequest } from "../types/express";
 
 // Session-based authentication middleware
-const requireSession = (req, res, next) => {
+export const requireSession = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): void => {
   if (!req.session || !req.session.user) {
     return next(new UnauthorizedError("Please log in to access this resource"));
   }
@@ -13,7 +19,11 @@ const requireSession = (req, res, next) => {
 };
 
 // JWT-based authentication middleware
-const requireJWT = async (req, res, next) => {
+export const requireJWT = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const token = req.headers.authorization?.replace("Bearer ", "");
 
@@ -22,7 +32,7 @@ const requireJWT = async (req, res, next) => {
     }
 
     const decoded = JWTUtil.verify(token);
-    const user = await userRepository.findById(decoded.userId);
+    const user = await userRepository.findById(decoded.id);
 
     if (!user) {
       return next(new UnauthorizedError("User not found"));
@@ -36,13 +46,17 @@ const requireJWT = async (req, res, next) => {
 };
 
 // Optional authentication - doesn't fail if no auth provided
-const optionalAuth = async (req, res, next) => {
+export const optionalAuth = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const token = req.headers.authorization?.replace("Bearer ", "");
 
     if (token) {
       const decoded = JWTUtil.verify(token);
-      const user = await userRepository.findById(decoded.userId);
+      const user = await userRepository.findById(decoded.id);
       if (user) {
         req.user = user;
       }
@@ -54,10 +68,4 @@ const optionalAuth = async (req, res, next) => {
   }
 
   next();
-};
-
-module.exports = {
-  requireSession,
-  requireJWT,
-  optionalAuth,
 };

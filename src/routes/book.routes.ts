@@ -1,13 +1,13 @@
-const express = require("express");
-const bookController = require("../controllers/book.controller");
-const {
+import express, { Router } from "express";
+import bookController from "../controllers/book.controller";
+import {
   validate,
   isbnSchema,
   authorSchema,
   titleSchema,
-} = require("../middleware/validate.middleware");
+} from "../middleware/validate.middleware";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Task 1: Get all books
 router.get("/", bookController.getAllBooks);
@@ -40,4 +40,4 @@ router.get(
   bookController.getBookReviews
 );
 
-module.exports = router;
+export default router;

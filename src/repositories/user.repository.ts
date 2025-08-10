@@ -1,24 +1,27 @@
-const User = require("../models/user.model");
+import { User } from "../models/user.model";
+import { CreateUserInput, User as UserInterface } from "../types";
 
 class UserRepository {
+  private users: Map<string, User>;
+
   constructor() {
     this.users = new Map(); // In-memory storage
   }
 
   // Create new user
-  create(userData) {
+  create(userData: CreateUserInput): Promise<User> {
     const user = new User(userData);
     this.users.set(user.username, user);
     return Promise.resolve(user);
   }
 
   // Find user by username
-  findByUsername(username) {
+  findByUsername(username: string): Promise<User | null> {
     return Promise.resolve(this.users.get(username) || null);
   }
 
   // Find user by ID
-  findById(id) {
+  findById(id: string): Promise<User | null> {
     for (let user of this.users.values()) {
       if (user.id === id) {
         return Promise.resolve(user);
@@ -28,7 +31,10 @@ class UserRepository {
   }
 
   // Update user
-  update(username, userData) {
+  update(
+    username: string,
+    userData: Partial<UserInterface>
+  ): Promise<User | null> {
     const user = this.users.get(username);
     if (user) {
       Object.assign(user, userData, { updatedAt: new Date() });
@@ -38,14 +44,14 @@ class UserRepository {
   }
 
   // Delete user
-  delete(username) {
+  delete(username: string): Promise<boolean> {
     return Promise.resolve(this.users.delete(username));
   }
 
   // Get all users (for admin purposes)
-  findAll() {
+  findAll(): Promise<User[]> {
     return Promise.resolve(Array.from(this.users.values()));
   }
 }
 
-module.exports = new UserRepository();
+export default new UserRepository();

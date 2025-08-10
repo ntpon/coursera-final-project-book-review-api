@@ -1,15 +1,16 @@
-const bcrypt = require("bcryptjs");
-const userRepository = require("../repositories/user.repository");
-const JWTUtil = require("../utils/jwt");
-const {
+import bcrypt from "bcryptjs";
+import userRepository from "../repositories/user.repository";
+import JWTUtil from "../utils/jwt";
+import {
   ConflictError,
   UnauthorizedError,
   BadRequestError,
-} = require("../utils/httpError");
+} from "../utils/httpError";
+import { CreateUserInput, LoginInput, AuthResponse, User } from "../types";
 
 class AuthService {
   // Task 6: Register new user
-  async register(userData) {
+  async register(userData: CreateUserInput): Promise<Omit<User, "password">> {
     const existingUser = await userRepository.findByUsername(userData.username);
 
     if (existingUser) {
@@ -31,7 +32,10 @@ class AuthService {
   }
 
   // Task 7: Login user
-  async login(username, password) {
+  async login(
+    username: string,
+    password: string
+  ): Promise<{ user: Omit<User, "password">; token: string }> {
     const user = await userRepository.findByUsername(username);
 
     if (!user) {
@@ -47,7 +51,7 @@ class AuthService {
 
     // Generate JWT token
     const token = JWTUtil.sign({
-      userId: user.id,
+      id: user.id,
       username: user.username,
     });
 
@@ -58,7 +62,7 @@ class AuthService {
   }
 
   // Get user profile
-  async getProfile(userId) {
+  async getProfile(userId: string): Promise<Omit<User, "password">> {
     const user = await userRepository.findById(userId);
 
     if (!user) {
@@ -69,4 +73,4 @@ class AuthService {
   }
 }
 
-module.exports = new AuthService();
+export default new AuthService();

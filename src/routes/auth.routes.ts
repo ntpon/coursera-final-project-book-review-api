@@ -1,13 +1,13 @@
-const express = require("express");
-const authController = require("../controllers/auth.controller");
-const { requireJWT } = require("../middleware/auth.middleware");
-const {
+import express, { Router } from "express";
+import authController from "../controllers/auth.controller";
+import { requireJWT } from "../middleware/auth.middleware";
+import {
   validate,
   registerSchema,
   loginSchema,
-} = require("../middleware/validate.middleware");
+} from "../middleware/validate.middleware";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Task 6: Register new user
 router.post("/register", validate(registerSchema), authController.register);
@@ -21,4 +21,4 @@ router.post("/logout", authController.logout);
 // Get current user profile (protected route)
 router.get("/profile", requireJWT, authController.getProfile);
 
-module.exports = router;
+export default router;

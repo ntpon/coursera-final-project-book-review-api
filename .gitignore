@@ -6,6 +6,10 @@ yarn-error.log*
 package-lock.json
 yarn.lock
 
+# TypeScript compiled files
+dist/
+*.tsbuildinfo
+
 # Runtime data
 pids
 *.pid

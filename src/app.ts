@@ -1,13 +1,13 @@
-const express = require("express");
-const session = require("express-session");
-const cors = require("cors");
-const helmet = require("helmet");
-const morgan = require("morgan");
+import express, { Application, Request, Response, NextFunction } from "express";
+import session from "express-session";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
 
-const config = require("./config/env");
-const routes = require("./routes");
+import config from "./config/env";
+import routes from "./routes";
 
-const app = express();
+const app: Application = express();
 
 // Security middleware
 app.use(helmet());
@@ -41,7 +41,7 @@ app.use(session(config.session));
 app.use("/api", routes);
 
 // Root endpoint
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Welcome to Book Review API",
@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 });
 
 // 404 handler
-app.use("*", (req, res) => {
+app.use("*", (req: Request, res: Response) => {
   res.status(404).json({
     success: false,
     message: `Route ${req.originalUrl} not found`,
@@ -59,7 +59,7 @@ app.use("*", (req, res) => {
 });
 
 // Global error handling middleware
-app.use((error, req, res, next) => {
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   console.error("Error:", error);
 
   // Default error
@@ -70,7 +70,7 @@ app.use((error, req, res, next) => {
   if (error.name === "ValidationError") {
     statusCode = 400;
     message = Object.values(error.errors)
-      .map((err) => err.message)
+      .map((err: any) => err.message)
       .join(", ");
   }
 
@@ -92,4 +92,4 @@ app.use((error, req, res, next) => {
   });
 });
 
-module.exports = app;
+export default app;

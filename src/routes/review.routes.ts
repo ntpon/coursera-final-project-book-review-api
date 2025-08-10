@@ -1,13 +1,13 @@
-const express = require("express");
-const reviewController = require("../controllers/review.controller");
-const { requireJWT } = require("../middleware/auth.middleware");
-const {
+import express, { Router } from "express";
+import reviewController from "../controllers/review.controller";
+import { requireJWT } from "../middleware/auth.middleware";
+import {
   validate,
   reviewSchema,
   isbnSchema,
-} = require("../middleware/validate.middleware");
+} from "../middleware/validate.middleware";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Task 8: Add or modify book review (protected route)
 router.put(
@@ -33,4 +33,4 @@ router.get(
   reviewController.getReviewsForBook
 );
 
-module.exports = router;
+export default router;

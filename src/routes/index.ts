@@ -1,9 +1,9 @@
-const express = require("express");
-const bookRoutes = require("./book.routes");
-const authRoutes = require("./auth.routes");
-const reviewRoutes = require("./review.routes");
+import express, { Request, Response, Router } from "express";
+import bookRoutes from "./book.routes";
+import authRoutes from "./auth.routes";
+import reviewRoutes from "./review.routes";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // API Routes
 router.use("/books", bookRoutes);
@@ -11,7 +11,7 @@ router.use("/auth", authRoutes);
 router.use("/reviews", reviewRoutes);
 
 // Health check endpoint
-router.get("/health", (req, res) => {
+router.get("/health", (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Server is running",
@@ -20,7 +20,7 @@ router.get("/health", (req, res) => {
 });
 
 // API Documentation endpoint
-router.get("/", (req, res) => {
+router.get("/", (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Book Review API",
@@ -48,4 +48,4 @@ router.get("/", (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

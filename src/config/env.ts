@@ -1,7 +1,28 @@
-require("dotenv").config();
+import dotenv from "dotenv";
 
-const config = {
-  port: process.env.PORT || 5000,
+dotenv.config();
+
+export interface Config {
+  port: number;
+  nodeEnv: string;
+  jwt: {
+    secret: string;
+    expiresIn: string;
+  };
+  session: {
+    secret: string;
+    resave: boolean;
+    saveUninitialized: boolean;
+    cookie: {
+      secure: boolean;
+      httpOnly: boolean;
+      maxAge: number;
+    };
+  };
+}
+
+const config: Config = {
+  port: parseInt(process.env.PORT || "5000", 10),
   nodeEnv: process.env.NODE_ENV || "development",
   jwt: {
     secret: process.env.JWT_SECRET || "fallback-secret-key",
@@ -19,4 +40,4 @@ const config = {
   },
 };
 
-module.exports = config;
+export default config;
