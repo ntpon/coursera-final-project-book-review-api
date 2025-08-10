@@ -1,0 +1,94 @@
+# Book Review API Testing
+
+### Base URL
+@baseUrl = http://localhost:5000/api
+
+### Variables
+@isbn = 9780143127550
+@author = Jane Austen
+@title = Pride
+
+### =========================
+### GENERAL USER ENDPOINTS
+### =========================
+
+### Task 1: Get all books
+GET {{baseUrl}}/books
+
+### Task 2: Get book by ISBN
+GET {{baseUrl}}/books/isbn/{{isbn}}
+
+### Task 3: Get books by author
+GET {{baseUrl}}/books/author/{{author}}
+
+### Task 4: Get books by title
+GET {{baseUrl}}/books/title/{{title}}
+
+### Task 5: Get book reviews
+GET {{baseUrl}}/books/{{isbn}}/reviews
+
+### =========================
+### AUTHENTICATION ENDPOINTS
+### =========================
+
+### Task 6: Register new user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123",
+  "email": "testuser@example.com",
+  "firstName": "Test",
+  "lastName": "User"
+}
+
+### Task 7: Login user
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123"
+}
+
+### Get user profile (requires authentication)
+GET {{baseUrl}}/auth/profile
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Logout user
+POST {{baseUrl}}/auth/logout
+
+### =========================
+### AUTHENTICATED ENDPOINTS
+### =========================
+
+### Task 8: Add/Modify book review (requires authentication)
+PUT {{baseUrl}}/reviews/{{isbn}}
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "rating": 5,
+  "comment": "Excellent book! A true masterpiece of literature."
+}
+
+### Task 9: Delete book review (requires authentication)
+DELETE {{baseUrl}}/reviews/{{isbn}}
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Get reviews for a book
+GET {{baseUrl}}/reviews/{{isbn}}
+
+### =========================
+### UTILITY ENDPOINTS
+### =========================
+
+### Health check
+GET {{baseUrl}}/health
+
+### API documentation
+GET {{baseUrl}}/
+
+### Root endpoint
+GET http://localhost:5000/
