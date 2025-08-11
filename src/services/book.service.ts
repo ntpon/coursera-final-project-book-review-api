@@ -45,7 +45,9 @@ class BookService {
   ): Promise<Review> {
     const book = await this.getBookByISBN(isbn);
 
-    const existingReviewIndex = book.reviews.findIndex((r) => r.userId === userId);
+    const existingReviewIndex = book.reviews.findIndex(
+      (r) => r.userId === userId
+    );
 
     let updatedReviews = [...book.reviews];
 
@@ -98,11 +100,11 @@ class BookService {
 
     // Filter out the review instead of calling a method
     const updatedReviews = book.reviews.filter((r) => r.userId !== userId);
-    
+
     // Update the book with the new reviews array
     const updatedBook = { ...book, reviews: updatedReviews };
     await bookRepository.update(isbn, updatedBook);
-    
+
     return true;
   }
 }

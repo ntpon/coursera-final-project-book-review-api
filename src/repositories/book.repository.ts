@@ -30,10 +30,7 @@ class BookRepository {
   }
 
   // Update book (for adding/updating reviews)
-  update(
-    isbn: string,
-    bookData: Partial<Book>
-  ): Promise<Book | null> {
+  update(isbn: string, bookData: Partial<Book>): Promise<Book | null> {
     if (books[isbn]) {
       books[isbn] = { ...books[isbn], ...bookData } as Book;
       return Promise.resolve(books[isbn] as Book);
